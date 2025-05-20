@@ -193,6 +193,7 @@ body {
   justify-content: center;
   background-color: #EFF6FD;
   min-height: 100svh;
+  overflow: hidden;
 }
 
 .ass-hero-cate {
@@ -203,8 +204,8 @@ body {
 }
 
 .ass-hero-cate-main {
-  width: 41rem;
-  height: 41rem;
+  width: 40rem;
+  height: 40rem;
   border-radius: 50%;
   background-color: #CDDE38;
   display: flex;
@@ -280,8 +281,23 @@ body {
   inset: 0;
   pointer-events: none;
   z-index: 1000;
+  padding-top: 10rem;
 }
-
+.ass-hero-list-inner {
+  position: absolute;
+  top: 6rem;
+  height: calc(100% - 10rem);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  row-gap: 6vh;
+}
+.ass-hero-list-left {
+left: 2rem
+}
+.ass-hero-list-right {
+  right: 2rem
+}
 .ass-hero-item .bg-layer {
   position: absolute;
   inset: 0;

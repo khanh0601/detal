@@ -187,8 +187,8 @@ const mainScript = () => {
     }
 
     setup() {
-      this.waveAnim();
-      this.randomizeItemsPosition();
+      this.initAssHeroWaves()
+      // this.randomizeItemsPosition();
       gsap.set('.ass-hero-item', { opacity: 0, scale: 0.5 });
       gsap.set('.ass-hero-cate-main', { opacity: 0, scale: 0.7 });
       gsap.set('.ass-hero-submit', { opacity: 0, scale: 0.7 });
@@ -204,8 +204,8 @@ const mainScript = () => {
       });
 
       tlHero
-       .to('.ass-hero-submit', {
-          opacity: 1, scale: 1, duration: 0.6, 
+        .to('.ass-hero-submit', {
+          opacity: 1, scale: 1, duration: 0.6,
         }, '<=.2')
         .to('.ass-hero-cate-main', {
           opacity: 1, scale: 1, duration: 0.6, onComplete: () => {
@@ -289,6 +289,47 @@ const mainScript = () => {
           const score = calculateProximityScore(itemCenter, cateBox);
           this.target.setAttribute('data-proximity', score.toFixed(2));
 
+          // 👉 NEW: Check if item is inside any .ass-hero-cate-deco
+        const topDeco = (() => {
+  const point = itemCenter;
+  const elements = document.elementsFromPoint(point.x, point.y);
+  return elements.find(el => el.classList.contains('ass-hero-cate-deco'));
+})();
+
+// 👉 Cập nhật màu nền theo top layer
+document.querySelectorAll('.ass-hero-cate-deco').forEach(deco => {
+  const decoBox = deco.getBoundingClientRect();
+  const decoCenter = {
+    x: decoBox.left + decoBox.width / 2,
+    y: decoBox.top + decoBox.height / 2,
+  };
+  const dx = itemCenter.x - decoCenter.x;
+  const dy = itemCenter.y - decoCenter.y;
+  const dist = Math.sqrt(dx * dx + dy * dy);
+  const decoRadius = Math.min(decoBox.width, decoBox.height) /3*2;
+
+  let proximityRatio = 0;
+
+  if (dist < decoRadius) {
+    proximityRatio = 1 - dist / decoRadius; // 1 = tâm, 0 = mép
+  }
+
+  const maxBlur = parseRem(20);
+  const maxSpread = 3;
+  const blur = maxBlur * proximityRatio;
+  const spread = maxSpread * proximityRatio;
+
+  const shadow = proximityRatio > 0
+    ? `0 0 ${blur}px ${spread}px rgb(205, 222, 56)`
+    : '0 0 0px 0px rgb(205, 222, 56)';
+
+  gsap.to(deco, {
+    boxShadow: shadow,
+    duration: 0.2
+  });
+});
+
+
           function calculateProximityScore(itemCenter, cateBox) {
             const cateCenter = {
               x: cateBox.left + cateBox.width / 2,
@@ -328,8 +369,8 @@ const mainScript = () => {
             const score = (1 - (dist - cateRadius) / (maxDist - cateRadius)) * 10;
             return Math.max(0, Math.min(score, 10));
           }
-
         },
+
         onDragEnd: function () {
           if (instance.tl) {
             instance.tl.timeScale(1);
@@ -358,148 +399,187 @@ const mainScript = () => {
         $('.ass-hero-popup').fadeIn();
       });
 
-      $('.ass-hero-popup-close').on('click', function(){
-        $('.ass-hero-popup').fadeOut() ;
+      $('.ass-hero-popup-close').on('click', function () {
+        $('.ass-hero-popup').fadeOut();
       })
     }
 
-    waveAnim() {
+    // waveAnim() {
+    //   const wrap = document.querySelector('.ass-hero-cate-deco-wrap');
+    //   wrap.innerHTML = '';
+    //   const duration = 10;
+    //   const countWave = 7;
+    //   this.tl = gsap.timeline({ repeat: -1, defaults: { ease: 'linear' } });
+
+    //   for (let i = 0; i < countWave; i++) {
+    //     const wave = document.createElement('div');
+    //     wave.classList.add('ass-hero-cate-deco');
+    //     wrap.appendChild(wave);
+
+    //     this.tl.fromTo(
+    //       wave,
+    //       { scale: 0.6, opacity: 0 },
+    //       {
+    //         duration,
+    //         scale: 3,
+    //         opacity: 0,
+    //         keyframes: [
+    //           { opacity: 0, scale: 1, percent: 0 },
+    //           { opacity: 0.65, percent: 20 },
+    //           { opacity: 1, percent: 60 },
+    //           { opacity: 0.65, percent: 80 },
+    //           { opacity: 0, scale: 3, percent: 100 },
+    //         ],
+    //         ease: 'linear',
+    //         repeat: -1,
+    //         repeatDelay: 0,
+    //         immediateRender: false,
+    //         delay: (duration / countWave) * i,
+    //       },
+    //       0
+    //     );
+    //   }
+    // }
+    initAssHeroWaves() {
+      if (window.__assHeroWavesInitialized) return; // chỉ init 1 lần
+      window.__assHeroWavesInitialized = true;
+
       const wrap = document.querySelector('.ass-hero-cate-deco-wrap');
+      if (!wrap) return;
+
       wrap.innerHTML = '';
-      const duration = 10;
-      const countWave = 7;
-      this.tl = gsap.timeline({ repeat: -1, defaults: { ease: 'linear' } });
+
+      const duration = 3;
+      const countWave = 4;
+      const scales = [1.3, 1.6, 1.9, 2.2];
+      const delayBetween = duration / countWave - .4;
 
       for (let i = 0; i < countWave; i++) {
         const wave = document.createElement('div');
         wave.classList.add('ass-hero-cate-deco');
         wrap.appendChild(wave);
 
-        this.tl.fromTo(
+        const coreScale = scales[i];
+
+        // Dùng gsap timeline riêng biệt cho từng wave để loop liên tục
+        gsap.fromTo(
           wave,
-          { scale: 0.6, opacity: 0 },
+          { scale: 0.5, opacity: 0, zIndex: 10 -i },
           {
+            scale: coreScale,
+            opacity: 1,
             duration,
-            scale: 3,
-            opacity: 0,
-            keyframes: [
-              { opacity: 0, scale: 1, percent: 0 },
-              { opacity: 0.65, percent: 20 },
-              { opacity: 1, percent: 60 },
-              { opacity: 0.65, percent: 80 },
-              { opacity: 0, scale: 3, percent: 100 },
-            ],
-            ease: 'linear',
-            repeat: -1,
-            repeatDelay: 0,
+            ease: 'power1.out',
+            // repeat: -1,
+            // repeatDelay: 0,
             immediateRender: false,
-            delay: (duration / countWave) * i,
-          },
-          0
+            delay: delayBetween * i,
+          }
         );
       }
     }
 
+
     randomizeItemsPosition() {
-  const $items = $('.ass-hero-item');
-  const $logo = $('.header-logo');
-  const $cate = $('.ass-hero-cate');
-  const $submit = $('.ass-hero-submit'); // Lấy nút submit
+      const $items = $('.ass-hero-item');
+      const $logo = $('.header-logo');
+      const $cate = $('.ass-hero-cate');
+      const $submit = $('.ass-hero-submit'); // Lấy nút submit
 
-  if (!$items.length || !$logo.length || !$cate.length || !$submit.length) return;
+      if (!$items.length || !$logo.length || !$cate.length || !$submit.length) return;
 
-  const logoBox = $logo[0].getBoundingClientRect();
-  const submitBox = $submit[0].getBoundingClientRect(); // Box của nút submit
-  const cateBox = $cate[0].getBoundingClientRect();
-  const cateCenter = {
-    x: cateBox.left + cateBox.width / 2,
-    y: cateBox.top + cateBox.height / 2,
-  };
-  const cateRadius = cateBox.width / 2;
-  const minGapFromCate = 160;
-  const logoPadding = 20;
-  const minDistanceToCate = cateRadius + minGapFromCate;
-
-  const viewportWidth = $(window).width();
-  const viewportHeight = $(window).height();
-
-  const placedBoxes = [];
-
-  $items.each(function () {
-    const $item = $(this);
-    const itemW = $item.outerWidth();
-    const itemH = $item.outerHeight();
-
-    let tries = 0;
-    let x, y, isValid = false;
-
-    while (!isValid && tries < 200) {
-      x = Math.random() * (viewportWidth - itemW);
-      y = Math.random() * (viewportHeight - itemH);
-
-      const itemBox = {
-        left: x,
-        right: x + itemW,
-        top: y,
-        bottom: y + itemH,
-        width: itemW,
-        height: itemH,
+      const logoBox = $logo[0].getBoundingClientRect();
+      const submitBox = $submit[0].getBoundingClientRect(); // Box của nút submit
+      const cateBox = $cate[0].getBoundingClientRect();
+      const cateCenter = {
+        x: cateBox.left + cateBox.width / 2,
+        y: cateBox.top + cateBox.height / 2,
       };
+      const cateRadius = cateBox.width / 2;
+      const minGapFromCate = 160;
+      const logoPadding = 20;
+      const minDistanceToCate = cateRadius + minGapFromCate;
 
-      // Tránh logo
-      const overlapsLogo =
-        itemBox.right > logoBox.left - logoPadding &&
-        itemBox.left < logoBox.right + logoPadding &&
-        itemBox.bottom > logoBox.top - logoPadding &&
-        itemBox.top < logoBox.bottom + logoPadding;
+      const viewportWidth = $(window).width();
+      const viewportHeight = $(window).height();
 
-      // Tránh nút submit
-      const overlapsSubmit =
-        itemBox.right > submitBox.left &&
-        itemBox.left < submitBox.right &&
-        itemBox.bottom > submitBox.top &&
-        itemBox.top < submitBox.bottom;
+      const placedBoxes = [];
 
-      // Tránh gần tâm cate
-      const itemCenter = {
-        x: x + itemW / 2,
-        y: y + itemH / 2,
-      };
-      const dx = itemCenter.x - cateCenter.x;
-      const dy = itemCenter.y - cateCenter.y;
-      const distToCate = Math.sqrt(dx * dx + dy * dy);
-      const tooCloseToCate = distToCate < minDistanceToCate;
+      $items.each(function () {
+        const $item = $(this);
+        const itemW = $item.outerWidth();
+        const itemH = $item.outerHeight();
 
-      // Tránh đè item khác
-      let overlapsAnother = false;
-      for (let b of placedBoxes) {
-        const overlap =
-          itemBox.left < b.right &&
-          itemBox.right > b.left &&
-          itemBox.top < b.bottom &&
-          itemBox.bottom > b.top;
-        if (overlap) {
-          overlapsAnother = true;
-          break;
+        let tries = 0;
+        let x, y, isValid = false;
+
+        while (!isValid && tries < 200) {
+          x = Math.random() * (viewportWidth - itemW);
+          y = Math.random() * (viewportHeight - itemH);
+
+          const itemBox = {
+            left: x,
+            right: x + itemW,
+            top: y,
+            bottom: y + itemH,
+            width: itemW,
+            height: itemH,
+          };
+
+          // Tránh logo
+          const overlapsLogo =
+            itemBox.right > logoBox.left - logoPadding &&
+            itemBox.left < logoBox.right + logoPadding &&
+            itemBox.bottom > logoBox.top - logoPadding &&
+            itemBox.top < logoBox.bottom + logoPadding;
+
+          // Tránh nút submit
+          const overlapsSubmit =
+            itemBox.right > submitBox.left &&
+            itemBox.left < submitBox.right &&
+            itemBox.bottom > submitBox.top &&
+            itemBox.top < submitBox.bottom;
+
+          // Tránh gần tâm cate
+          const itemCenter = {
+            x: x + itemW / 2,
+            y: y + itemH / 2,
+          };
+          const dx = itemCenter.x - cateCenter.x;
+          const dy = itemCenter.y - cateCenter.y;
+          const distToCate = Math.sqrt(dx * dx + dy * dy);
+          const tooCloseToCate = distToCate < minDistanceToCate;
+
+          // Tránh đè item khác
+          let overlapsAnother = false;
+          for (let b of placedBoxes) {
+            const overlap =
+              itemBox.left < b.right &&
+              itemBox.right > b.left &&
+              itemBox.top < b.bottom &&
+              itemBox.bottom > b.top;
+            if (overlap) {
+              overlapsAnother = true;
+              break;
+            }
+          }
+
+          if (!overlapsLogo && !overlapsSubmit && !tooCloseToCate && !overlapsAnother) {
+            isValid = true;
+            placedBoxes.push(itemBox);
+          }
+
+          tries++;
         }
-      }
 
-      if (!overlapsLogo && !overlapsSubmit && !tooCloseToCate && !overlapsAnother) {
-        isValid = true;
-        placedBoxes.push(itemBox);
-      }
-
-      tries++;
+        // Đặt vị trí cuối cùng
+        gsap.set($item[0], {
+          position: 'absolute',
+          left: x,
+          top: y,
+        });
+      });
     }
-
-    // Đặt vị trí cuối cùng
-    gsap.set($item[0], {
-      position: 'absolute',
-      left: x,
-      top: y,
-    });
-  });
-}
 
   }
 
