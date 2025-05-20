@@ -76,7 +76,7 @@ body {
 
 .txt.txt-24 {
   font-size: 2.4rem;
-  line-height: 1em;
+  line-height: 1.2em;
 }
 
 .txt.txt-20 {
@@ -204,8 +204,8 @@ body {
 }
 
 .ass-hero-cate-main {
-  width: 40rem;
-  height: 40rem;
+  width: 32rem;
+  height: 32rem;
   border-radius: 50%;
   background-color: #CDDE38;
   display: flex;
@@ -223,9 +223,9 @@ body {
 }
 
 .ass-hero-cate-deco {
-  width: 41rem;
+  width: 32rem;
   background-color: #CDDE384D;
-  height: 41rem;
+  height: 32rem;
   border-radius: 50%;
   position: absolute;
 }
@@ -243,11 +243,11 @@ body {
   overflow: hidden;
   transition: background-color 0.3s ease;
   display: flex;
-  gap: 1.6rem;
+  gap: 1rem;
   width: max-content;
   align-items: center;
   pointer-events: all;
-  padding: 1.6rem 2rem 1.6rem 1.6rem;
+  padding: 1.2rem 1.6rem 1.2rem 1.2rem;
 }
 
 .ass-hero-item:hover {

@@ -252,7 +252,7 @@ const mainScript = () => {
             window.innerWidth - cateCenter.x,
             cateCenter.y,
             window.innerHeight - cateCenter.y
-          ) - cateRadius;
+          ) - cateRadius + itemBox.width;
 
           const distFromCateEdge = Math.max(0, dist - cateRadius);
           const proximity = Math.min(distFromCateEdge / maxDistance, 1);
@@ -273,7 +273,7 @@ const mainScript = () => {
           });
 
           // text color
-          const level = Math.round(255 * (1 - mix) / 1.4);
+          const level = Math.round(255 * (1 - mix) );
           gsap.to(this.target.querySelector('.ass-hero-item-txt'), {
             color: `rgb(${level}, ${level}, ${level})`,
             duration: 0.2,
@@ -451,7 +451,7 @@ document.querySelectorAll('.ass-hero-cate-deco').forEach(deco => {
 
       const duration = 3;
       const countWave = 4;
-      const scales = [1.3, 1.6, 1.9, 2.2];
+      const scales = [1.45, 2, 2.6, 3.2];
       const delayBetween = duration / countWave - .4;
 
       for (let i = 0; i < countWave; i++) {
