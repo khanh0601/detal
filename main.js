@@ -88,6 +88,115 @@ const mainScript = () => {
       });
     }
   }
+  const handleMultipleLottieInteract = (() => {
+    const lottieMap = new Map(); // Lưu thông tin từng player theo ID
+
+    const initLottie = ({ id, from, loopFrame, speed }) => {
+      const playerEl = document.querySelector(id);
+      if (!playerEl) return;
+
+      const player = playerEl.getLottie();
+      player.goToAndStop(from, true);
+
+      lottieMap.set(id, {
+        player,
+        from,
+        loopFrame,
+        speed: speed || 1,
+        interactivityStarted: false,
+      });
+
+      console.log(`✅ Initialized ${id} at frame ${from}`);
+    };
+
+    const startLoop = (id) => {
+      const data = lottieMap.get(id);
+      if (!data || data.interactivityStarted) return;
+
+      LottieInteractivity.create({
+        player: id,
+        mode: 'chain',
+        actions: [
+          {
+            state: 'loop',
+            frames: [data.from, data.loopFrame],
+            speed: data.speed,
+          },
+        ],
+      });
+
+      data.interactivityStarted = true;
+    };
+
+    const playToFrame = (id, targetFrame) => {
+      const data = lottieMap.get(id);
+      if (!data) {
+        console.warn(`❌ Lottie ${id} chưa được init`);
+        return;
+      }
+
+      const { player } = data;
+      const currentFrame = player.currentFrame;
+
+      player.goToAndStop(targetFrame, true);
+    };
+
+    const initScrollAnim = ({ id, parent, from, loopFrame, speed }) => {
+      const $roads = $(parent).find('.lottie-container');
+
+      $roads.each((_index, item) => {
+        const $this = $(item);
+        gsap.set($this, { opacity: 0 });
+      });
+
+      const animIn = () => {
+        gsap.killTweensOf($roads);
+        $roads.each((_index, item) => {
+          const $this = $(item);
+          gsap.fromTo($this,
+            { opacity: 0, y: '5rem' },
+            {
+              opacity: 1,
+              y: 0,
+              duration: 0.8,
+              ease: "power3.out",
+              delay: (_index + 1) * 0.2 + 0.5,
+              overwrite: 'auto'
+            });
+        });
+        initLottie({ id, from, loopFrame, speed });
+      };
+
+      const animOut = () => {
+        gsap.killTweensOf($roads);
+        $roads.each((_index, item) => {
+          const $this = $(item);
+          gsap.to($this, {
+            opacity: 0,
+            duration: 0.8,
+            ease: "power3.out",
+            y: '5rem'
+          });
+        });
+      };
+
+      ScrollTrigger.create({
+        trigger: parent,
+        start: 'top bottom',
+        end: 'bottom top',
+        onEnter: animIn,
+        onEnterBack: animIn,
+        onLeave: animOut,
+        onLeaveBack: animOut,
+      });
+    };
+
+    // Trả về API public
+    return {
+      initScrollAnim,  // dùng để khởi tạo từng cái kèm scroll animation
+      playToFrame,     // điều khiển từng cái riêng biệt
+    };
+  })();
   class Loading {
     constructor() { }
     isDoneLoading() {
@@ -273,7 +382,7 @@ const mainScript = () => {
           });
 
           // text color
-          const level = Math.round(255 * (1 - mix) );
+          const level = Math.round(255 * (1 - mix));
           gsap.to(this.target.querySelector('.ass-hero-item-txt'), {
             color: `rgb(${level}, ${level}, ${level})`,
             duration: 0.2,
@@ -290,44 +399,44 @@ const mainScript = () => {
           this.target.setAttribute('data-proximity', score.toFixed(2));
 
           // 👉 NEW: Check if item is inside any .ass-hero-cate-deco
-        const topDeco = (() => {
-  const point = itemCenter;
-  const elements = document.elementsFromPoint(point.x, point.y);
-  return elements.find(el => el.classList.contains('ass-hero-cate-deco'));
-})();
+          const topDeco = (() => {
+            const point = itemCenter;
+            const elements = document.elementsFromPoint(point.x, point.y);
+            return elements.find(el => el.classList.contains('ass-hero-cate-deco'));
+          })();
 
-// 👉 Cập nhật màu nền theo top layer
-document.querySelectorAll('.ass-hero-cate-deco').forEach(deco => {
-  const decoBox = deco.getBoundingClientRect();
-  const decoCenter = {
-    x: decoBox.left + decoBox.width / 2,
-    y: decoBox.top + decoBox.height / 2,
-  };
-  const dx = itemCenter.x - decoCenter.x;
-  const dy = itemCenter.y - decoCenter.y;
-  const dist = Math.sqrt(dx * dx + dy * dy);
-  const decoRadius = Math.min(decoBox.width, decoBox.height) /3*2;
+          // 👉 Cập nhật màu nền theo top layer
+          document.querySelectorAll('.ass-hero-cate-deco').forEach(deco => {
+            const decoBox = deco.getBoundingClientRect();
+            const decoCenter = {
+              x: decoBox.left + decoBox.width / 2,
+              y: decoBox.top + decoBox.height / 2,
+            };
+            const dx = itemCenter.x - decoCenter.x;
+            const dy = itemCenter.y - decoCenter.y;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+            const decoRadius = Math.min(decoBox.width, decoBox.height) / 3 * 2;
 
-  let proximityRatio = 0;
+            let proximityRatio = 0;
 
-  if (dist < decoRadius) {
-    proximityRatio = 1 - dist / decoRadius; // 1 = tâm, 0 = mép
-  }
+            if (dist < decoRadius) {
+              proximityRatio = 1 - dist / decoRadius; // 1 = tâm, 0 = mép
+            }
 
-  const maxBlur = parseRem(20);
-  const maxSpread = 3;
-  const blur = maxBlur * proximityRatio;
-  const spread = maxSpread * proximityRatio;
+            const maxBlur = parseRem(20);
+            const maxSpread = 3;
+            const blur = maxBlur * proximityRatio;
+            const spread = maxSpread * proximityRatio;
 
-  const shadow = proximityRatio > 0
-    ? `0 0 ${blur}px ${spread}px rgb(205, 222, 56)`
-    : '0 0 0px 0px rgb(205, 222, 56)';
+            const shadow = proximityRatio > 0
+              ? `0 0 ${blur}px ${spread}px rgb(205, 222, 56)`
+              : '0 0 0px 0px rgb(205, 222, 56)';
 
-  gsap.to(deco, {
-    boxShadow: shadow,
-    duration: 0.2
-  });
-});
+            gsap.to(deco, {
+              boxShadow: shadow,
+              duration: 0.2
+            });
+          });
 
 
           function calculateProximityScore(itemCenter, cateBox) {
@@ -464,7 +573,7 @@ document.querySelectorAll('.ass-hero-cate-deco').forEach(deco => {
         // Dùng gsap timeline riêng biệt cho từng wave để loop liên tục
         gsap.fromTo(
           wave,
-          { scale: 0.5, opacity: 0, zIndex: 10 -i },
+          { scale: 0.5, opacity: 0, zIndex: 10 - i },
           {
             scale: coreScale,
             opacity: 1,
@@ -582,9 +691,252 @@ document.querySelectorAll('.ass-hero-cate-deco').forEach(deco => {
     }
 
   }
-
   const assHero = new AssHero();
+  class HomeHero extends TriggerSetupHero {
+    constructor() {
+      super();
+      this.tl = null;
+      this.draggableInstance = null;
+      this.percent= .5;
+    }
 
+    trigger() {
+      this.setup();
+      this.interact();
+    }
+
+    setup() {
+      console.log('home')
+      $('.home-hero-medicine-input-label').on('click', function (e) {
+        $('.home-hero-medicine-input-label').removeClass("active")
+        $(this).addClass('active')
+      })
+      const $ic = $('.home-hero-survey-process-ic');
+      const $container = $('.home-hero-survey-process');
+
+      const containerWidth = $container.width();
+      const icWidth = $ic.outerWidth();
+      const maxLeft = containerWidth - icWidth;
+
+      const initLeft = maxLeft / 2;
+      $ic.css('left', initLeft + 'px');
+      const $doctor = $('.home-hero-doctor-wrap');
+
+      const containerOffset = $container.offset();
+      const doctorWidth = $doctor.outerWidth();
+      const left50InPx = containerWidth / 2 - doctorWidth / 2;
+      $doctor.css('left', left50InPx + 'px');
+      let widthInit = initLeft + icWidth;
+      $('.home-hero-survey-inner').css('width', widthInit + 'px');
+      handleMultipleLottieInteract.initScrollAnim({
+        id: '#lottie-ic',
+        parent: '.home-hero',
+        from: 60,
+        loopFrame: 130
+      });
+      handleMultipleLottieInteract.initScrollAnim({
+        id: '#lottie-doctor-male',
+        parent: '.home-hero',
+        from: 200,
+        loopFrame: 130
+      });
+      handleMultipleLottieInteract.initScrollAnim({
+        id: '#lottie-doctor-female',
+        parent: '.home-hero',
+        from: 200,
+        loopFrame: 130
+      });
+      this.initDraggable();
+    }
+    interact() {
+
+      $('input[name="gender"]').on('change', () => {
+        const selectedGender = $(event.target).val();
+        $('.doctor-item').removeClass('active');
+        $(`.doctor-item[data-type="${selectedGender}"]`).addClass('active');
+        
+      });
+      const createTimeline = (direction) => {
+        let isNext = direction === 'next';
+        let index = $('.home-hero-item.active').index();
+        const lastIndex = $('.home-hero-item').length - 1;
+
+        // Kiểm tra giới hạn để không animation khi ở đầu/cuối
+        if ((isNext && index === lastIndex) || (!isNext && index === 0)) return;
+
+        let tl = gsap.timeline({
+          onStart: () => $('.home-hero-overlay').addClass('active')
+        });
+
+        // Thiết lập biến css --col-* ban đầu theo direction
+        gsap.set('.home-hero', {
+          '--col-1': isNext ? '0' : '100vw',
+          '--col-2': isNext ? '0' : '100vw',
+          '--col-3': isNext ? '0' : '100vw',
+          '--col-4': isNext ? '0' : '100vw',
+          '--col-5': isNext ? '0' : '100vw'
+        });
+
+        // Thiết lập clipPath phù hợp cho overlay
+        let clipPath = isNext
+          ? 'polygon(0% 0,var(--col-1) 0%, var(--col-1) 20vh,var(--col-2) 20vh, var(--col-2) 40vh,var(--col-3) 40vh,var(--col-3) 60vh,var(--col-4) 60vh, var(--col-4) 80vh,var(--col-5) 80vh, var(--col-5) 100vh,0% 100vh)'
+          : 'polygon(100% 0%,var(--col-1) 0%, var(--col-1) 20vh,var(--col-2) 20vh, var(--col-2) 40vh,var(--col-3) 40vh,var(--col-3) 60vh,var(--col-4) 60vh, var(--col-4) 80vh,var(--col-5) 80vh, var(--col-5) 100vh,100% 100vh)';
+
+        gsap.set('.home-hero-overlay', { clipPath });
+
+        // Chuỗi animation chính
+        const toValue = isNext ? '100vw' : '0';
+        const fromValue = isNext ? '0' : '100vw';
+
+        // 5 lần animate --col-1 đến --col-5 lên toValue cùng lúc
+        for (let i = 1; i <= 5; i++) {
+          tl.to('.home-hero', {
+            duration: 0.6,
+            [`--col-${i}`]: toValue,
+            ease: "expoScale(0.5,7,none)",
+            onComplete: i === 5 ? () => {
+              // gọi activeItem sau khi animation cuối cùng hoàn thành
+              this.activeItem(index, direction);
+            } : null
+          }, i === 1 ? '<=0.1' : '<=0.1');
+        }
+
+        // 5 lần animate trả về giá trị ban đầu từ toValue về fromValue cùng lúc
+        tl.to('.home-hero', { duration: 0.6, '--col-1': fromValue, ease: "expoScale(0.5,7,none)" }, '<=0.8');
+        for (let i = 2; i <= 5; i++) {
+          tl.to('.home-hero', { duration: 0.6, [`--col-${i}`]: fromValue, ease: "expoScale(0.5,7,none)" }, '<=0.1');
+        }
+      }
+
+      // Gắn sự kiện click cho 2 nút next/prev gọi chung hàm trên
+      $('.control-next').on('click', () => {
+        createTimeline('next');
+      });
+      $('.control-prev').on('click', () => createTimeline('prev'));
+      $('.control-submit').on('click', () => {
+        
+        $('.ass-hero-popup').fadeIn();
+      })
+      $('.ass-hero-popup-close').on('click', () => {
+        $('.ass-hero-popup').fadeOut();
+      })
+    }
+    activeItem(index, type) {
+      const $items = $('.home-hero-item');
+      const lastIndex = $items.length - 1;
+
+      // Handle active class for mail and prev control
+      if (index === 1 && type === 'prev') {
+        $('.home-hero-control-left-mail').addClass('active');
+        $('.home-hero-control-txt.control-prev').removeClass('active');
+      } else if (index === 0 && type === 'next') {
+        $('.home-hero-control-left-mail').removeClass('active');
+        $('.home-hero-control-txt.control-prev').addClass('active');
+      }
+
+      // Handle submit and next controls
+      if (index + 1 === lastIndex) {
+        $('.control-submit').addClass('active');
+        $('.control-next').removeClass('active');
+      } else {
+        $('.control-submit').removeClass('active');
+        $('.control-next').addClass('active');
+      }
+
+      // Change active item based on type
+      if (type === 'prev' && index > 0) {
+        $items.eq(index).removeClass('active');
+        $items.eq(index - 1).addClass('active');
+      } else if (type === 'next' && index < lastIndex) {
+        $items.eq(index).removeClass('active');
+        $items.eq(index + 1).addClass('active');
+      }
+    }
+   updateDoctorFrameBasedOnIcPosition() {
+  const $ic = $('.home-hero-survey-process-ic');
+  const $container = $('.home-hero-survey-process');
+
+  if ($ic.length === 0 || $container.length === 0) return;
+
+  const icOffset = $ic.offset();
+  const icWidth = $ic.outerWidth();
+  const containerOffset = $container.offset();
+  const containerWidth = $container.width();
+  const maxLeft = containerWidth - icWidth;
+  const currentLeft = icOffset.left - containerOffset.left;
+
+  const percent = currentLeft / maxLeft + 0.5;
+
+  const player = document.querySelector('#lottie-ic')?.getLottie?.();
+  const doctor = document.querySelector('.doctor-item.active')?.getLottie?.();
+
+  if (player) {
+    const totalFrames = 130;
+    const targetFrame = Math.round(percent * totalFrames);
+    player.goToAndStop(targetFrame, true);
+  }
+
+  if (doctor) {
+    const totalFramesDoctor = 290;
+    const targetFrameDoctor = Math.round(percent * totalFramesDoctor);
+    doctor.goToAndStop(targetFrameDoctor, true);
+  }
+
+  // cập nhật lại vị trí doctor UI nếu cần
+  const widthDoctor = $('.home-hero-doctor-wrap').width();
+  const doctorLeft = currentLeft + icWidth / 2 - widthDoctor / 2;
+  if (doctorLeft >= 0 && doctorLeft - parseRem(40) < $container.width() - widthDoctor) {
+    $('.home-hero-doctor-wrap').css('left', doctorLeft + 'px');
+  }
+}
+
+    initDraggable() {
+      this.draggableInstance = Draggable.create('.home-hero-survey-process-ic', {
+        bounds: '.home-hero-survey-process',
+        onDrag: function () {
+          const $ic = $(this.target);
+          const $container = $('.home-hero-survey-process');
+
+          const icOffset = $ic.offset();
+          const icWidth = $ic.outerWidth();
+          const containerOffset = $container.offset();
+          const containerWidth = $container.width();
+          const maxLeft = containerWidth - icWidth;
+          const currentLeft = icOffset.left - containerOffset.left;
+          const distance = (icOffset.left + icWidth) - containerOffset.left + 3;
+          $('.home-hero-survey-inner').css('width', distance + 'px')
+          const x = this.x;
+          console.log(x)
+          this.percent = x / maxLeft + .5;
+          if(this.percent< 0){
+            this.percent =0
+          }
+          if(this.percent > 10) {
+            this.percent = 10;
+          }
+          const player = document.querySelector('#lottie-ic')?.getLottie?.();
+          const doctor = document.querySelector('.doctor-item.active')?.getLottie?.();
+          let widthDoctor = $('.home-hero-doctor-wrap').width();
+          const doctorLeft = currentLeft + icWidth / 2 - widthDoctor / 2;
+          if (doctorLeft >= 0 && doctorLeft - parseRem(40) < $container.width() - widthDoctor) {
+            $('.home-hero-doctor-wrap').css('left', doctorLeft + 'px');
+          }
+          if (player) {
+            const totalFrames = 130;
+            const targetFrame = Math.round(this.percent * totalFrames);
+            
+            $('.ass-hero-popup-result').text(`${Math.floor(this.percent*10)} Điểm`);
+            const totalFramesDoctor = 290;
+            const targetFrameDoctor = Math.round(this.percent * totalFramesDoctor);
+            player.goToAndStop(targetFrame, true);
+            doctor.goToAndStop(targetFrameDoctor, true);
+          }
+        }
+      })[0]; // lấy instance đầu tiên vì Draggable.create trả về mảng
+    }
+
+  }
+  let homeHero = new HomeHero();
   class Header extends TriggerSetupHero {
     constructor() {
       super();
@@ -757,7 +1109,9 @@ document.querySelectorAll('.ass-hero-cate-deco').forEach(deco => {
   const SCRIPT = {
     assScript: () => {
       assHero.trigger();
-
+    },
+    homeScript: () => {
+      homeHero.trigger();
     },
   };
   const initGlobal = () => {
