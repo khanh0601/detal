@@ -505,9 +505,9 @@ body {
 }
 .home-hero-thuoc {
   position: absolute;
-  right: 5.2rem;
+  right: 7.2rem;
   bottom: calc(100%);
-  width: 12rem;
+  width: 8rem;
 }
 .home-hero-medicine-wrap {
   width: max-content;

@@ -926,7 +926,7 @@ const mainScript = () => {
             const targetFrame = Math.round(this.percent * totalFrames);
             
             $('.ass-hero-popup-result').text(`${Math.floor(this.percent*10)} Điểm`);
-            const totalFramesDoctor = 290;
+            const totalFramesDoctor = 298;
             const targetFrameDoctor = Math.round(this.percent * totalFramesDoctor);
             player.goToAndStop(targetFrame, true);
             doctor.goToAndStop(targetFrameDoctor, true);
