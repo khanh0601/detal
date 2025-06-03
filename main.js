@@ -697,7 +697,7 @@ const mainScript = () => {
       super();
       this.tl = null;
       this.draggableInstance = null;
-      this.percent= .5;
+      this.percent = .5;
     }
 
     trigger() {
@@ -706,7 +706,11 @@ const mainScript = () => {
     }
 
     setup() {
-      console.log('home')
+      $('.home-hero-survey-process-ic').each(function () {
+        let $el = $(this);
+        let height = $el.outerHeight();
+        $el.css('width', height + 'px');
+      });
       $('.home-hero-medicine-input-label').on('click', function (e) {
         $('.home-hero-medicine-input-label').removeClass("active")
         $(this).addClass('active')
@@ -754,7 +758,7 @@ const mainScript = () => {
         const selectedGender = $(event.target).val();
         $('.doctor-item').removeClass('active');
         $(`.doctor-item[data-type="${selectedGender}"]`).addClass('active');
-        
+
       });
       const createTimeline = (direction) => {
         let isNext = direction === 'next';
@@ -814,7 +818,7 @@ const mainScript = () => {
       });
       $('.control-prev').on('click', () => createTimeline('prev'));
       $('.control-submit').on('click', () => {
-        
+
         $('.ass-hero-popup').fadeIn();
       })
       $('.ass-hero-popup-close').on('click', () => {
@@ -852,43 +856,43 @@ const mainScript = () => {
         $items.eq(index + 1).addClass('active');
       }
     }
-   updateDoctorFrameBasedOnIcPosition() {
-  const $ic = $('.home-hero-survey-process-ic');
-  const $container = $('.home-hero-survey-process');
+    updateDoctorFrameBasedOnIcPosition() {
+      const $ic = $('.home-hero-survey-process-ic');
+      const $container = $('.home-hero-survey-process');
 
-  if ($ic.length === 0 || $container.length === 0) return;
+      if ($ic.length === 0 || $container.length === 0) return;
 
-  const icOffset = $ic.offset();
-  const icWidth = $ic.outerWidth();
-  const containerOffset = $container.offset();
-  const containerWidth = $container.width();
-  const maxLeft = containerWidth - icWidth;
-  const currentLeft = icOffset.left - containerOffset.left;
+      const icOffset = $ic.offset();
+      const icWidth = $ic.outerWidth();
+      const containerOffset = $container.offset();
+      const containerWidth = $container.width();
+      const maxLeft = containerWidth - icWidth;
+      const currentLeft = icOffset.left - containerOffset.left;
 
-  const percent = currentLeft / maxLeft + 0.5;
+      const percent = currentLeft / maxLeft + 0.5;
 
-  const player = document.querySelector('#lottie-ic')?.getLottie?.();
-  const doctor = document.querySelector('.doctor-item.active')?.getLottie?.();
+      const player = document.querySelector('#lottie-ic')?.getLottie?.();
+      const doctor = document.querySelector('.doctor-item.active')?.getLottie?.();
 
-  if (player) {
-    const totalFrames = 130;
-    const targetFrame = Math.round(percent * totalFrames);
-    player.goToAndStop(targetFrame, true);
-  }
+      if (player) {
+        const totalFrames = 130;
+        const targetFrame = Math.round(percent * totalFrames);
+        player.goToAndStop(targetFrame, true);
+      }
 
-  if (doctor) {
-    const totalFramesDoctor = 290;
-    const targetFrameDoctor = Math.round(percent * totalFramesDoctor);
-    doctor.goToAndStop(targetFrameDoctor, true);
-  }
+      if (doctor) {
+        const totalFramesDoctor = 290;
+        const targetFrameDoctor = Math.round(percent * totalFramesDoctor);
+        doctor.goToAndStop(targetFrameDoctor, true);
+      }
 
-  // cập nhật lại vị trí doctor UI nếu cần
-  const widthDoctor = $('.home-hero-doctor-wrap').width();
-  const doctorLeft = currentLeft + icWidth / 2 - widthDoctor / 2;
-  if (doctorLeft >= 0 && doctorLeft - parseRem(40) < $container.width() - widthDoctor) {
-    $('.home-hero-doctor-wrap').css('left', doctorLeft + 'px');
-  }
-}
+      // cập nhật lại vị trí doctor UI nếu cần
+      const widthDoctor = $('.home-hero-doctor-wrap').width();
+      const doctorLeft = currentLeft + icWidth / 2 - widthDoctor / 2;
+      if (doctorLeft >= 0 && doctorLeft - parseRem(40) < $container.width() - widthDoctor) {
+        $('.home-hero-doctor-wrap').css('left', doctorLeft + 'px');
+      }
+    }
 
     initDraggable() {
       this.draggableInstance = Draggable.create('.home-hero-survey-process-ic', {
@@ -908,10 +912,10 @@ const mainScript = () => {
           const x = this.x;
           console.log(x)
           this.percent = x / maxLeft + .5;
-          if(this.percent< 0){
-            this.percent =0
+          if (this.percent < 0) {
+            this.percent = 0
           }
-          if(this.percent > 10) {
+          if (this.percent > 10) {
             this.percent = 10;
           }
           const player = document.querySelector('#lottie-ic')?.getLottie?.();
@@ -924,8 +928,8 @@ const mainScript = () => {
           if (player) {
             const totalFrames = 130;
             const targetFrame = Math.round(this.percent * totalFrames);
-            
-            $('.ass-hero-popup-result').text(`${Math.floor(this.percent*10)} Điểm`);
+
+            $('.ass-hero-popup-result').text(`${Math.floor(this.percent * 10)} Điểm`);
             const totalFramesDoctor = 298;
             const targetFrameDoctor = Math.round(this.percent * totalFramesDoctor);
             player.goToAndStop(targetFrame, true);
