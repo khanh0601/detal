@@ -404,7 +404,7 @@ body {
   --col-4: 0;
   --col-5: 0;
   height: 100vh;
-  background-color: #EFF6FD;
+  background-color: white;
   position: relative;
   display: flex;
   justify-content: center;
@@ -587,7 +587,7 @@ body {
 .home-hero-survey {
   height: max-content;
   position: relative;
-  margin-bottom: 28vh;
+  margin-bottom: 20vh;
   margin-top: auto;
   border-radius: 10rem;
   width: 114rem;
@@ -602,7 +602,7 @@ body {
 }
 .home-hero-survey::after{
   content: "";
-  background-color: white;
+  background-color: #EFF6FD;
   inset: 0;
   position: absolute;
   z-index: 10rem;
@@ -643,9 +643,10 @@ body {
   width: 4.6rem;
 }
 .home-hero-doctor-wrap {
-  width: 33rem;
+  width: 100%;
   position: absolute;
   left: 0;
+  align-items: anchor-center;
   bottom: calc(100% - 10rem);
   transition: left ease .1s;
   display: grid;
@@ -664,4 +665,76 @@ body {
 lottie-player {
   width: 100%;
   height: 100%;
+}
+@media only screen and (max-width: 991px)  {
+  .txt.txt-24 {
+  font-size: 1.6rem;
+  line-height: 1.5em;
+ }
+ .ass-hero-cate-deco, .ass-hero-cate-main {
+  width: 22rem;
+  height: 22rem;
+  padding: 1rem;
+ }
+ .ass-hero-item {
+  padding: .8rem .8rem 1.2rem .8rem;
+  gap: .6rem;
+ }
+ .ass-hero-item-ic {
+  width: 2.6rem;
+  border-width: 0 .2rem .2rem 0;
+ }
+ .ass-hero-list-inner {
+  position: static;
+  display: flex;
+  flex-direction: row;
+  column-gap: 2rem;
+  height: max-content;
+ }
+ .ass-hero-list {
+  display: flex;
+  flex-direction: column;
+  justify-content: end;
+  height: 100vh;
+ }
+ .ass-hero-item {
+  height: max-content;
+ }
+ .cursor {
+  display: none;
+ }
+}
+#animation > svg > g > g:nth-child(1) > rect {
+  display: none  !important;
+}
+.myVideo {
+  width: 100%;
+
+}
+.myVideo {
+  grid-column: 1/2;
+  grid-row: 1/2;
+  opacity: 0;
+  pointer-events: none;
+}
+.myVideo.active {
+  opacity: 1;
+  pointer-events: all;
+}
+.home-hero-box {
+  position: absolute;
+    bottom: 100%;
+    width: 31%;
+    right: 3%;
+    display: flex;
+    height: 13rem;
+    flex-direction: column;
+    align-items: center;
+}
+.home-hero-box-ic {
+  width: 50%;
+  margin-inline: auto;
+}
+#myVideoMale {
+  margin-bottom: -2rem;
 }

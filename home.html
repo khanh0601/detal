@@ -94,13 +94,25 @@
           <div class="home-hero-survey-wrap home-hero-item ">
             <div class="home-hero-survey">
               <div class="home-hero-doctor-wrap">
-                <lottie-player id='lottie-doctor-male' src='./json/DeltaMV-Male-Doctor.json' data-type="Male" class="doctor-item active"></lottie-player>
-                <lottie-player id='lottie-doctor-female' src='./json/DeltaMV-Female-Doctor.json' data-type="Female" class="doctor-item "></lottie-player>
+                <!-- <lottie-player id='lottie-doctor-male' src='./json/DeltaMV-Male-doctor.json' data-type="Male" class="doctor-item active"></lottie-player>
+                <lottie-player id='lottie-doctor-female' src='./json/DeltaMV-Female-Doctor.json' data-type="Female" class="doctor-item "></lottie-player> -->
+                <video id="myVideoMale" class="myVideo video-male active" playsinline preload="auto" muted data-type="Male">
+                  <source src="./json/DeltaMV-Male-doctor.mp4" type="video/mp4">
+                </video>
+                <video id="myVideoFelmale" class="myVideo video-felmale" playsinline preload="auto" muted data-type="Female">
+                  <source src="./json/DeltaMV-Female-doctor.mp4" type="video/mp4">
+                </video>
               </div>
-              <div class="home-hero-thuoc">
+              <!-- <div class="home-hero-thuoc">
                 <div class="home-hero-thuoc-inner">
                   <img src="./imgs/thuoc.png" alt="" class="img">
                 </div>
+              </div> -->
+              <div class="home-hero-box">
+                <div class="home-hero-box-ic">
+                  <img src="./imgs/logo-demo 1.svg" class="img" alt="">
+                </div>
+                <div class="txt txt-24 home-hero-box-txt">Bristol-Myers Squibb</div>
               </div>
               <div class="home-hero-survey-inner">
                 <div class="home-hero-survey-process">
