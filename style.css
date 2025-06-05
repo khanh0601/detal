@@ -646,7 +646,7 @@ body {
   width: 100%;
   position: absolute;
   left: 0;
-  align-items: anchor-center;
+  align-items: center;
   bottom: calc(100% - 10rem);
   transition: left ease .1s;
   display: grid;
