@@ -706,6 +706,34 @@ const mainScript = () => {
     }
 
     setup() {
+      gsap.set('.home-hero-medicine-wrap', { opacity: 0, scale: 0.8 });
+      gsap.set('.home-hero-control-next', { opacity: 0, yPercent: 20 });
+
+      let title = new SplitType('.home-hero-control-left-mail', { types: 'lines, words', lineClass: 'cus-line' });
+      gsap.set(title.words, { opacity: 0, yPercent: 100 });
+
+      let tlHero = new gsap.timeline({
+        onStart: () => {
+          $('.on-init-hide').removeClass('on-init-hide');
+          gsap.set('.ass-hero-cate-deco-wrap', { opacity: 0 });
+        }
+      });
+      tlHero
+        .to( title.words, {
+          opacity: 1,
+          duration: 0.6,
+          yPercent: 0,
+        })
+        .to('.home-hero-medicine-wrap', {
+          opacity: 1,
+          scale: 1,
+          duration: 1,
+        }, '<=0')
+        .to('.home-hero-control-next', {
+          opacity: 1,
+          yPercent: 0,
+          duration: 0.6,
+        }, '<=0')
       const video1 = document.getElementById('myVideoFelmale');
       const video2 = document.getElementById('myVideoMale');
 
