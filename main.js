@@ -560,7 +560,7 @@ const mainScript = () => {
 
       const duration = 3;
       const countWave = 4;
-      const scales = viewport.w > 991 ? [1.45, 2, 2.6, 3.2] : [1.45, 2, 2.6, 3.2];
+      const scales = viewport.w > 768 ? [1.45, 2, 2.6, 3.2] : [1.3, 1.8, 2.3, 2.8];
       const delayBetween = duration / countWave - .4;
 
       for (let i = 0; i < countWave; i++) {

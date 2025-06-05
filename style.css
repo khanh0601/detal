@@ -667,6 +667,9 @@ lottie-player {
   height: 100%;
 }
 @media only screen and (max-width: 991px)  {
+  .ass-hero-cate {
+    margin-bottom: 11vh;
+  }
   .txt.txt-24 {
   font-size: 1.6rem;
   line-height: 1.5em;
@@ -696,6 +699,8 @@ lottie-player {
   flex-direction: column;
   justify-content: end;
   height: 100vh;
+  padding-bottom: 6vh;
+  gap: 1.6rem
  }
  .ass-hero-item {
   height: max-content;
@@ -737,4 +742,45 @@ lottie-player {
 }
 #myVideoMale {
   margin-bottom: -2rem;
+}
+@media only screen and (max-width: 768px)  {
+  .ass-hero-cate-deco, .ass-hero-cate-main {
+    width: 20rem;
+    height: 20rem;
+  }
+  .ass-hero-cate {
+    margin-bottom: 6vh;
+}
+  .ass-hero-list-inner {
+    column-gap: 1rem;
+  }
+  .ass-hero-list {
+    gap: 1rem;
+  }
+  .txt.txt-24 {
+    font-size: 1.5rem;
+    line-height: 1.5em;
+}
+.ass-hero-submit {
+  padding: 1rem 1.8rem;
+  gap: .6rem;
+}
+.header-logo {
+  width: 14rem;
+}
+.ass-hero-item-ic {
+  display: none;
+}
+.txt.txt-24.txt-med.ass-hero-item-txt {
+  line-height: 1em;
+}
+.ass-hero-item {
+  padding: 1rem;
+}
+.txt.txt-20 {
+  font-size: 1.6rem;
+}
+.ass-hero-submit-ic{
+  width: 2rem;
+}
 }
