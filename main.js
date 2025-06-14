@@ -560,7 +560,7 @@ const mainScript = () => {
 
       const duration = 3;
       const countWave = 4;
-      const scales = viewport.w > 768 ? [1.45, 2, 2.6, 3.2] : [1.3, 1.8, 2.3, 2.8];
+      const scales = [1.45, 2, 2.6, 3.2];
       const delayBetween = duration / countWave - .4;
 
       for (let i = 0; i < countWave; i++) {
@@ -706,46 +706,6 @@ const mainScript = () => {
     }
 
     setup() {
-      gsap.set('.home-hero-medicine', { opacity: 0, scale: 0.8 });
-      gsap.set('.home-hero-control-next', { opacity: 0, yPercent: 20 });
-      gsap.set('.home-hero-medicine-input-label', { opacity: 0, yPercent: 20 });
-      let title = new SplitType('.home-hero-control-left-mail', { types: 'lines, words', lineClass: 'cus-line' });
-      gsap.set(title.words, { opacity: 0, yPercent: 100 });
-
-      let tlHero = new gsap.timeline({
-        onStart: () => {
-          $('.on-init-hide').removeClass('on-init-hide');
-        }
-      });
-      tlHero
-        .to( title.words, {
-          opacity: 1,
-          duration: 0.6,
-          yPercent: 0,
-        })
-        .to('.home-hero-medicine', {
-          opacity: 1,
-          scale: 1,
-          duration: 1,
-        }, '<=0')
-        .to('.home-hero-medicine-input-label', {
-          opacity: 1,
-          yPercent: 0,
-          duration: 0.6,
-          stagger: 0.2,
-        },'<=.4')
-        .to('.home-hero-control-next', {
-          opacity: 1,
-          yPercent: 0,
-          duration: 0.6,
-        }, '<=-.4')
-      const video1 = document.getElementById('myVideoFelmale');
-      const video2 = document.getElementById('myVideoMale');
-
-      const half1 = video1.duration * 0.5;
-      const half2 = video2.duration * 0.5;
-      video1.currentTime = half1;
-      video2.currentTime = half2;
       $('.home-hero-survey-process-ic').each(function () {
         let $el = $(this);
         let height = $el.outerHeight();
@@ -778,27 +738,27 @@ const mainScript = () => {
         from: 60,
         loopFrame: 130
       });
-      // handleMultipleLottieInteract.initScrollAnim({
-      //   id: '#lottie-doctor-male',
-      //   parent: '.home-hero',
-      //   from: 200,
-      //   loopFrame: 130
-      // });
-      // handleMultipleLottieInteract.initScrollAnim({
-      //   id: '#lottie-doctor-female',
-      //   parent: '.home-hero',
-      //   from: 200,
-      //   loopFrame: 130
-      // });
+      handleMultipleLottieInteract.initScrollAnim({
+        id: '#lottie-doctor-male',
+        parent: '.home-hero',
+        from: 200,
+        loopFrame: 130
+      });
+      handleMultipleLottieInteract.initScrollAnim({
+        id: '#lottie-doctor-female',
+        parent: '.home-hero',
+        from: 200,
+        loopFrame: 130
+      });
       this.initDraggable();
     }
     interact() {
 
       $('input[name="gender"]').on('change', () => {
         const selectedGender = $(event.target).val();
-        $('.myVideo').removeClass('active');
-        $(`.myVideo[data-type="${selectedGender}"]`).addClass('active');
-        this.resetAnim();
+        $('.doctor-item').removeClass('active');
+        $(`.doctor-item[data-type="${selectedGender}"]`).addClass('active');
+
       });
       const createTimeline = (direction) => {
         let isNext = direction === 'next';
@@ -921,36 +881,26 @@ const mainScript = () => {
       }
 
       if (doctor) {
-        const totalFramesDoctor = 490;
+        const totalFramesDoctor = 290;
         const targetFrameDoctor = Math.round(percent * totalFramesDoctor);
         doctor.goToAndStop(targetFrameDoctor, true);
       }
-      // cập nhật lại vị trí doctor UI nếu cần
-      // const widthDoctor = $('.home-hero-doctor-wrap').width();
-      // const doctorLeft = currentLeft + icWidth / 2 - widthDoctor / 2;
-      // if (doctorLeft >= 0 && doctorLeft - parseRem(40) < $container.width() - widthDoctor) {
-      //   $('.home-hero-doctor-wrap').css('left', doctorLeft + 'px');
-      // }
-    }
-    resetAnim() {
-      let percent = this.draggableInstance.percent || .5;
-      console.log(percent)
-      const video1 = document.getElementById('myVideoFelmale');
-      const video2 = document.getElementById('myVideoMale');
 
-      const half1 = video1.duration * percent;
-      const half2 = video2.duration * percent;
-      video1.currentTime = half1;
-      video2.currentTime = half2;
+      // cập nhật lại vị trí doctor UI nếu cần
+      const widthDoctor = $('.home-hero-doctor-wrap').width();
+      const doctorLeft = currentLeft + icWidth / 2 - widthDoctor / 2;
+      if (doctorLeft >= 0 && doctorLeft - parseRem(40) < $container.width() - widthDoctor) {
+        $('.home-hero-doctor-wrap').css('left', doctorLeft + 'px');
+      }
     }
-    
+
     initDraggable() {
       this.draggableInstance = Draggable.create('.home-hero-survey-process-ic', {
         bounds: '.home-hero-survey-process',
         onDrag: function () {
           const $ic = $(this.target);
           const $container = $('.home-hero-survey-process');
-          const video = document.querySelector('.myVideo.active');
+
           const icOffset = $ic.offset();
           const icWidth = $ic.outerWidth();
           const containerOffset = $container.offset();
@@ -960,6 +910,7 @@ const mainScript = () => {
           const distance = (icOffset.left + icWidth) - containerOffset.left + 3;
           $('.home-hero-survey-inner').css('width', distance + 'px')
           const x = this.x;
+          console.log(x)
           this.percent = x / maxLeft + .5;
           if (this.percent < 0) {
             this.percent = 0
@@ -968,39 +919,24 @@ const mainScript = () => {
             this.percent = 10;
           }
           const player = document.querySelector('#lottie-ic')?.getLottie?.();
-          // const doctor = document.querySelector('.doctor-item.active')?.getLottie?.();
-          // let widthDoctor = $('.home-hero-doctor-wrap').width();
-          // const doctorLeft = currentLeft + icWidth / 2 - widthDoctor / 2;
-          // if (doctorLeft >= 0 && doctorLeft < $container.width() - widthDoctor) {
-          //   $('.home-hero-doctor-wrap').css('left', doctorLeft + 'px');
-          // }
-
+          const doctor = document.querySelector('.doctor-item.active')?.getLottie?.();
+          let widthDoctor = $('.home-hero-doctor-wrap').width();
+          const doctorLeft = currentLeft + icWidth / 2 - widthDoctor / 2;
+          if (doctorLeft >= 0 && doctorLeft - parseRem(40) < $container.width() - widthDoctor) {
+            $('.home-hero-doctor-wrap').css('left', doctorLeft + 'px');
+          }
           if (player) {
             const totalFrames = 130;
             const targetFrame = Math.round(this.percent * totalFrames);
-            const min = 0.83;
-            const max = 1.0;
-            
-            if (this.percent >= min) {
-              const progress = gsap.utils.clamp(0, 1, (this.percent - min) / (max - min));
-              const yValue = progress * 55; // y sẽ từ 0 -> 50 khi percent từ 0.83 -> 1
-              gsap.to('.home-hero-box', { y: yValue, duration: 0.2, ease: 'power1.out' });
-            } else {
-              // Nếu nhỏ hơn min thì y về 0
-              gsap.to('.home-hero-box', { y: 0, duration: 0.2, ease: 'power1.out' });
-            }
-        
+
             $('.ass-hero-popup-result').text(`${Math.floor(this.percent * 10)} Điểm`);
+            const totalFramesDoctor = 298;
+            const targetFrameDoctor = Math.round(this.percent * totalFramesDoctor);
             player.goToAndStop(targetFrame, true);
-            if (video.readyState >= 2) {
-              const safePercent = gsap.utils.clamp(0, 1, this.percent); 
-              const videoTime = safePercent * video.duration;
-              video.currentTime = videoTime;
-            }
+            doctor.goToAndStop(targetFrameDoctor, true);
           }
         }
-      })[0];
-
+      })[0]; // lấy instance đầu tiên vì Draggable.create trả về mảng
     }
 
   }
