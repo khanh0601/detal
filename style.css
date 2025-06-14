@@ -646,6 +646,7 @@ body {
   width: 33rem;
   position: absolute;
   left: 0;
+  align-items: center;
   bottom: calc(100% - 10rem);
   transition: left ease .1s;
   display: grid;
