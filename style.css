@@ -667,7 +667,7 @@ lottie-player {
 }
 .home-hero-box  {
   width:16rem;
-  height: 16rem;
+  min-height: 12rem;
   position: absolute;
   right: 0.1rem;
   bottom: 100%;
@@ -677,6 +677,7 @@ lottie-player {
   justify-content: center;
   flex-direction: column;
   row-gap: .6rem;
+  padding-block: 1rem;
 }
 .home-hero-box.box-female {
   right: .8rem;
