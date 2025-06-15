@@ -687,10 +687,15 @@ lottie-player {
   margin-block: auto;
 }
 .home-hero-item.item-2 {
-  max-width: 80%;
   width: 100%;
 }
+.home-hero-survey-form {
+  margin-inline: -2.4rem;
+  width: calc(100% + 4.8rem);
+}
 .home-hero-survey-form iframe {
+  width: 100%;
+  padding-inline: 2rem;
   background-color: #EFF6FD;
 }
 .home-hero-box-img{
@@ -738,8 +743,15 @@ lottie-player {
     font-size: 2rem;
 }
  }
+ 
  @media only screen and (max-width: 767px) {
-
+  .container {
+    padding-inline: 2rem;
+  }
+  .home-hero-survey-form {
+    margin-inline: -2rem;
+    width: calc(100% + 4rem);
+  }
   .home-hero-survey-process,.home-hero-survey {
     width: 33rem;
     margin-inline: auto;

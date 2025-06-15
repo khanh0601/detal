@@ -740,7 +740,7 @@ const mainScript = () => {
             duration: 1,
           }, '<=-.4')
       let heightInitFrame = viewport.w > 991 ? viewport.h : viewport.h * .7;
-      $('.home-hero-survey-form iframe').css('height', heightInitFrame + 'px');
+      // viewport.w > 767 && $('.home-hero-survey-form iframe').css('height', heightInitFrame + 'px');
       $('.home-hero-survey-process-ic').each(function () {
         let $el = $(this);
         let height = $el.outerHeight();
@@ -759,7 +759,7 @@ const mainScript = () => {
 
       const initLeft = maxLeft / 2 ;
       console.log(initLeft);
-      $ic.css('left', initLeft - parseRem(5) + 'px');
+      viewport.w > 767 ? $ic.css('left', initLeft - parseRem(5) + 'px') : $ic.css('left', initLeft - parseRem(3.5) + 'px');
       const $doctor = $('.home-hero-doctor-wrap');
       const doctorWidth = $doctor.outerWidth();
       const left50InPx = containerWidth / 2 - doctorWidth / 2 - parseRem(15);
@@ -856,14 +856,14 @@ const mainScript = () => {
           items.removeClass('active');
           items.eq(index).addClass('active');
           if($('.home-hero-item').length -1 == index ){
-            $('.home-hero-control-item[data-type="next"').hide();
+            $('.home-hero-control').hide();
           }
           $('.home-hero-control-left-mail').removeClass('active');
             $('.control-prev').addClass('active');
           break;
         case 'prev':
           index--;
-          $('.home-hero-control-item[data-type="next"').show();
+          $('.home-hero-control').show();
           if(index == 0){
             $('.home-hero-control-left-mail').addClass('active');
             $('.control-prev').removeClass('active');
@@ -886,7 +886,7 @@ const mainScript = () => {
           const containerWidth = $container.width();
           const maxLeft = containerWidth - icWidth;
           const currentLeft = icOffset.left - containerOffset.left;
-          const distance = (icOffset.left + icWidth) - containerOffset.left + parseRem(6);
+          const distance = viewport.w > 767 ? (icOffset.left + icWidth) - containerOffset.left + parseRem(5) : (icOffset.left + icWidth) - containerOffset.left + parseRem(3);
           $('.home-hero-survey-inner').css('width', distance + 'px')
           const x = this.x;
           console.log(x)
