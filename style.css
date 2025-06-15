@@ -739,6 +739,7 @@ lottie-player {
 }
  }
  @media only screen and (max-width: 767px) {
+
   .home-hero-survey-process,.home-hero-survey {
     width: 33rem;
     margin-inline: auto;
@@ -749,7 +750,7 @@ lottie-player {
   .home-hero-control {
     justify-content: center;
     gap: 1.6rem;
-    bottom: 10vh;
+    bottom: 13vh;
   }
   /* .home-hero-control-item {
     place-items: center;
