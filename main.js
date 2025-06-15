@@ -889,7 +889,7 @@ const mainScript = () => {
           const containerWidth = $container.width();
           const maxLeft = containerWidth - icWidth;
           const currentLeft = icOffset.left - containerOffset.left;
-          const distance = viewport.w > 767 ? (icOffset.left + icWidth) - containerOffset.left + parseRem(5) : (icOffset.left + icWidth) - containerOffset.left + parseRem(3.5);
+          const distance = viewport.w > 767 ? (icOffset.left + icWidth) - containerOffset.left + parseRem(5) : (icOffset.left + icWidth) - containerOffset.left + parseRem(5);
           $('.home-hero-survey-inner').css('width', distance + 'px')
           const x = this.x;
           console.log(x)
