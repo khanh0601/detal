@@ -27,14 +27,14 @@
     </div>
     <section class="home-hero">
       <div class="home-hero-control">
-        <div class="home-hero-control-item home-hero-control-left">
+        <div class="home-hero-control-item home-hero-control-left on-init-hide">
           <a href="mailto:hello@delta.mv" class="txt txt-20 txt-med home-hero-control-left-mail active hover-un">
             <span>hello@delta.mv</span>
             <div class="line line-hover header-menu-item-line">
               <div class="line-inner line-inner-hover header-menu-item-line-inner"></div>
             </div>
           </a>
-          <div class="txt txt-20 txt-med home-hero-control-txt control-prev">
+          <div class="txt txt-20 txt-med home-hero-control-txt control-prev" data-type="prev">
             <div class="home-hero-control-ic">
               <svg width="100%" viewBox="0 0 24 15" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path
@@ -45,7 +45,7 @@
             <span>Back</span>
           </div>
         </div>
-        <div class="home-hero-control-left home-hero-control-item">
+        <div class="home-hero-control-left home-hero-control-item on-init-hide" data-type='next'>
           <div class=" home-hero-control-next control-next active">
             <div class="txt txt-20 txt-med home-hero-control-txt ">
               <span>Next</span>
@@ -60,25 +60,11 @@
 
             </div>
           </div>
-          <div class=" home-hero-control-submit control-submit">
-            <div class="txt txt-20 txt-med home-hero-control-txt ">
-              <span>Submit</span>
-              <div class="home-hero-control-ic">
-                <svg width="100%" viewBox="0 0 24 15" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path
-                    d="M23.298 9.61271L18.2096 14.7092C18.1352 14.7842 18.0467 14.8437 17.9492 14.8843C17.8517 14.9249 17.7472 14.9458 17.6416 14.9458C17.5359 14.9458 17.4314 14.9249 17.3339 14.8843C17.2364 14.8437 17.1479 14.7842 17.0735 14.7092C16.9985 14.6348 16.939 14.5463 16.8984 14.4488C16.8578 14.3513 16.8368 14.2467 16.8368 14.1411C16.8368 14.0355 16.8578 13.9309 16.8984 13.8334C16.939 13.7359 16.9985 13.6474 17.0735 13.5731L21.9299 8.71663H0.80007C0.587879 8.71663 0.384377 8.63234 0.234335 8.4823C0.0842929 8.33226 0 8.12876 0 7.91656C0 7.70437 0.0842929 7.50087 0.234335 7.35083C0.384377 7.20079 0.587879 7.11649 0.80007 7.11649H21.9299L17.0735 2.26007C16.9228 2.10941 16.8382 1.90508 16.8382 1.69202C16.8382 1.47896 16.9228 1.27462 17.0735 1.12397C17.2242 0.97331 17.4285 0.888672 17.6416 0.888672C17.8546 0.888672 18.0589 0.97331 18.2096 1.12397L23.298 6.22041C23.7475 6.67045 24 7.28051 24 7.91656C24 8.55262 23.7475 9.16267 23.298 9.61271Z"
-                    fill="white" />
-                </svg>
-
-              </div>
-
-            </div>
-          </div>
         </div>
       </div>
       <div class="container">
-        <div class="home-hero-inner">
-          <div class="home-hero-medicine-wrap home-hero-item active">
+        <div class="home-hero-inner on-init-hide">
+          <div class="home-hero-medicine-wrap home-hero-item active ">
             <div class="home-hero-medicine">
               <img src="./imgs/lo_thuoc.png" alt="" class="img">
             </div>
@@ -97,10 +83,14 @@
                 <lottie-player id='lottie-doctor-male' src='./json/DeltaMV-Male-Doctor.json' data-type="Male" class="doctor-item active"></lottie-player>
                 <lottie-player id='lottie-doctor-female' src='./json/DeltaMV-Female-Doctor.json' data-type="Female" class="doctor-item "></lottie-player>
               </div>
-              <div class="home-hero-thuoc">
+              <!-- <div class="home-hero-thuoc">
                 <div class="home-hero-thuoc-inner">
                   <img src="./imgs/thuoc.png" alt="" class="img">
                 </div>
+              </div> -->
+              <div class="home-hero-box">
+                <div class="home-hero-box-img"><img src="/imgs/logo-demo.svg" alt="" class="img"></div>
+                <div class="txt txt-20 home-hero-box-txt">Bristol-Myers Squibb</div>
               </div>
               <div class="home-hero-survey-inner">
                 <div class="home-hero-survey-process">
@@ -111,13 +101,25 @@
               </div>
             </div>
           </div>
+          <div class="home-hero-survey-wrap home-hero-item item-2 ">
+              <div class="home-hero-survey-form">
+                <iframe class="home-hero-survey-form-iframe"
+                  data-src="https://qualtricsxmkvj4sc78k.au1.qualtrics.com/jfe/form/SV_6QAoHsm5BqjgnRA"
+                  width="100%"
+                  height="900"
+                  frameborder="0"
+                  style="border: none;">
+                  Loading…
+                </iframe>
+              </div>
+          </div>
         </div>
       </div>
       <div class="home-hero-overlay"></div>
       <div class="ass-hero-popup">
           <div class="ass-hero-popup-close txt txt-32">x</div>
           <div class="txt txt-32 ass-hero-popup-title">Kết quả(sau này sẽ gửi về form submit)</div>
-         <div class="txt txt-32 ass-hero-popup-result" style="text-align: center;"></div>
+         <div class="txt txt-32 ass-hero-popup-result" style="text-align: center;">5 Điểm</div>
         </div>
     </section>
   </main>

@@ -513,42 +513,6 @@ const mainScript = () => {
       })
     }
 
-    // waveAnim() {
-    //   const wrap = document.querySelector('.ass-hero-cate-deco-wrap');
-    //   wrap.innerHTML = '';
-    //   const duration = 10;
-    //   const countWave = 7;
-    //   this.tl = gsap.timeline({ repeat: -1, defaults: { ease: 'linear' } });
-
-    //   for (let i = 0; i < countWave; i++) {
-    //     const wave = document.createElement('div');
-    //     wave.classList.add('ass-hero-cate-deco');
-    //     wrap.appendChild(wave);
-
-    //     this.tl.fromTo(
-    //       wave,
-    //       { scale: 0.6, opacity: 0 },
-    //       {
-    //         duration,
-    //         scale: 3,
-    //         opacity: 0,
-    //         keyframes: [
-    //           { opacity: 0, scale: 1, percent: 0 },
-    //           { opacity: 0.65, percent: 20 },
-    //           { opacity: 1, percent: 60 },
-    //           { opacity: 0.65, percent: 80 },
-    //           { opacity: 0, scale: 3, percent: 100 },
-    //         ],
-    //         ease: 'linear',
-    //         repeat: -1,
-    //         repeatDelay: 0,
-    //         immediateRender: false,
-    //         delay: (duration / countWave) * i,
-    //       },
-    //       0
-    //     );
-    //   }
-    // }
     initAssHeroWaves() {
       if (window.__assHeroWavesInitialized) return; // chỉ init 1 lần
       window.__assHeroWavesInitialized = true;
@@ -706,6 +670,41 @@ const mainScript = () => {
     }
 
     setup() {
+      gsap.set('.home-hero-medicine', { opacity: 0, scale: 0.8 });
+      gsap.set('.home-hero-control-next', { opacity: 0, yPercent: 100 });
+      gsap.set('.home-hero-medicine-input-label', { opacity: 0, yPercent: 40 });
+      let title = new SplitType('.home-hero-control-left-mail span', { types: 'lines, words', lineClass: 'cus-line' });
+      gsap.set(title.words, { opacity: 0, yPercent: 100 });
+
+      let tlHero = new gsap.timeline({
+        onStart: () => {
+          $('.on-init-hide').removeClass('on-init-hide');
+        }
+      });
+      tlHero
+        .to( title.words, {
+          opacity: 1,
+          duration: 1,
+          yPercent: 0,
+        })
+        .to('.home-hero-medicine', {
+          opacity: 1,
+          scale: 1,
+          duration: 1,
+        }, '<=0')
+        .to('.home-hero-medicine-input-label', {
+          opacity: 1,
+          yPercent: 0,
+          duration: 1,
+          stagger: 0.2,
+        },'<=.2')
+          .to('.home-hero-control-next', {
+            opacity: 1,
+            yPercent: 0,
+            duration: 1,
+          }, '<=-.4')
+      let heightInitFrame = viewport.w > 991 ? viewport.h : viewport.h * .8;
+      $('.home-hero-survey-form iframe').css('height', heightInitFrame + 'px');
       $('.home-hero-survey-process-ic').each(function () {
         let $el = $(this);
         let height = $el.outerHeight();
@@ -728,7 +727,7 @@ const mainScript = () => {
 
       const containerOffset = $container.offset();
       const doctorWidth = $doctor.outerWidth();
-      const left50InPx = containerWidth / 2 - doctorWidth / 2;
+      const left50InPx = containerWidth / 2 - doctorWidth / 2 - parseRem(15);
       $doctor.css('left', left50InPx + 'px');
       let widthInit = initLeft + icWidth;
       $('.home-hero-survey-inner').css('width', widthInit + 'px');
@@ -742,13 +741,11 @@ const mainScript = () => {
         id: '#lottie-doctor-male',
         parent: '.home-hero',
         from: 200,
-        loopFrame: 130
       });
       handleMultipleLottieInteract.initScrollAnim({
         id: '#lottie-doctor-female',
         parent: '.home-hero',
         from: 200,
-        loopFrame: 130
       });
       this.initDraggable();
     }
@@ -756,6 +753,12 @@ const mainScript = () => {
 
       $('input[name="gender"]').on('change', () => {
         const selectedGender = $(event.target).val();
+        if (selectedGender === 'Female') {
+          $('.home-hero-box').addClass('box-female')
+        }
+        else {
+          $('.home-hero-box').removeClass('box-female')
+        }
         $('.doctor-item').removeClass('active');
         $(`.doctor-item[data-type="${selectedGender}"]`).addClass('active');
 
@@ -763,16 +766,9 @@ const mainScript = () => {
       const createTimeline = (direction) => {
         let isNext = direction === 'next';
         let index = $('.home-hero-item.active').index();
-        const lastIndex = $('.home-hero-item').length - 1;
-
-        // Kiểm tra giới hạn để không animation khi ở đầu/cuối
-        if ((isNext && index === lastIndex) || (!isNext && index === 0)) return;
-
         let tl = gsap.timeline({
           onStart: () => $('.home-hero-overlay').addClass('active')
         });
-
-        // Thiết lập biến css --col-* ban đầu theo direction
         gsap.set('.home-hero', {
           '--col-1': isNext ? '0' : '100vw',
           '--col-2': isNext ? '0' : '100vw',
@@ -780,120 +776,68 @@ const mainScript = () => {
           '--col-4': isNext ? '0' : '100vw',
           '--col-5': isNext ? '0' : '100vw'
         });
-
-        // Thiết lập clipPath phù hợp cho overlay
         let clipPath = isNext
           ? 'polygon(0% 0,var(--col-1) 0%, var(--col-1) 20vh,var(--col-2) 20vh, var(--col-2) 40vh,var(--col-3) 40vh,var(--col-3) 60vh,var(--col-4) 60vh, var(--col-4) 80vh,var(--col-5) 80vh, var(--col-5) 100vh,0% 100vh)'
           : 'polygon(100% 0%,var(--col-1) 0%, var(--col-1) 20vh,var(--col-2) 20vh, var(--col-2) 40vh,var(--col-3) 40vh,var(--col-3) 60vh,var(--col-4) 60vh, var(--col-4) 80vh,var(--col-5) 80vh, var(--col-5) 100vh,100% 100vh)';
-
         gsap.set('.home-hero-overlay', { clipPath });
-
-        // Chuỗi animation chính
         const toValue = isNext ? '100vw' : '0';
         const fromValue = isNext ? '0' : '100vw';
-
-        // 5 lần animate --col-1 đến --col-5 lên toValue cùng lúc
         for (let i = 1; i <= 5; i++) {
           tl.to('.home-hero', {
             duration: 0.6,
             [`--col-${i}`]: toValue,
             ease: "expoScale(0.5,7,none)",
             onComplete: i === 5 ? () => {
-              // gọi activeItem sau khi animation cuối cùng hoàn thành
               this.activeItem(index, direction);
             } : null
           }, i === 1 ? '<=0.1' : '<=0.1');
         }
-
-        // 5 lần animate trả về giá trị ban đầu từ toValue về fromValue cùng lúc
         tl.to('.home-hero', { duration: 0.6, '--col-1': fromValue, ease: "expoScale(0.5,7,none)" }, '<=0.8');
         for (let i = 2; i <= 5; i++) {
           tl.to('.home-hero', { duration: 0.6, [`--col-${i}`]: fromValue, ease: "expoScale(0.5,7,none)" }, '<=0.1');
         }
       }
 
-      // Gắn sự kiện click cho 2 nút next/prev gọi chung hàm trên
       $('.control-next').on('click', () => {
+        let index = $('.home-hero-item.active').index();
+        index++;
+        if($('.home-hero-item').length -1 == index ){
+          let srcFrame = $('.home-hero-survey-form-iframe').attr('data-src')+'?result_core='+$('.ass-hero-popup-result').text();
+          console.log(srcFrame)
+          $('.home-hero-survey-form-iframe').attr('src', srcFrame);  
+        }
         createTimeline('next');
       });
       $('.control-prev').on('click', () => createTimeline('prev'));
-      $('.control-submit').on('click', () => {
-
-        $('.ass-hero-popup').fadeIn();
-      })
-      $('.ass-hero-popup-close').on('click', () => {
-        $('.ass-hero-popup').fadeOut();
-      })
     }
     activeItem(index, type) {
-      const $items = $('.home-hero-item');
-      const lastIndex = $items.length - 1;
-
-      // Handle active class for mail and prev control
-      if (index === 1 && type === 'prev') {
-        $('.home-hero-control-left-mail').addClass('active');
-        $('.home-hero-control-txt.control-prev').removeClass('active');
-      } else if (index === 0 && type === 'next') {
-        $('.home-hero-control-left-mail').removeClass('active');
-        $('.home-hero-control-txt.control-prev').addClass('active');
-      }
-
-      // Handle submit and next controls
-      if (index + 1 === lastIndex) {
-        $('.control-submit').addClass('active');
-        $('.control-next').removeClass('active');
-      } else {
-        $('.control-submit').removeClass('active');
-        $('.control-next').addClass('active');
-      }
-
-      // Change active item based on type
-      if (type === 'prev' && index > 0) {
-        $items.eq(index).removeClass('active');
-        $items.eq(index - 1).addClass('active');
-      } else if (type === 'next' && index < lastIndex) {
-        $items.eq(index).removeClass('active');
-        $items.eq(index + 1).addClass('active');
+      let items = $('.home-hero-item');
+      let length = items.length-1;
+      console.log(length) 
+      switch (type) {
+        case 'next':
+          index++;
+          console.log(index)
+          items.removeClass('active');
+          items.eq(index).addClass('active');
+          if($('.home-hero-item').length -1 == index ){
+            $('.home-hero-control-item[data-type="next"').hide();
+          }
+          $('.home-hero-control-left-mail').removeClass('active');
+            $('.control-prev').addClass('active');
+          break;
+        case 'prev':
+          index--;
+          $('.home-hero-control-item[data-type="next"').show();
+          if(index == 0){
+            $('.home-hero-control-left-mail').addClass('active');
+            $('.control-prev').removeClass('active');
+          }
+          items.removeClass('active');
+          items.eq(index).addClass('active');
+          break;
       }
     }
-    updateDoctorFrameBasedOnIcPosition() {
-      const $ic = $('.home-hero-survey-process-ic');
-      const $container = $('.home-hero-survey-process');
-
-      if ($ic.length === 0 || $container.length === 0) return;
-
-      const icOffset = $ic.offset();
-      const icWidth = $ic.outerWidth();
-      const containerOffset = $container.offset();
-      const containerWidth = $container.width();
-      const maxLeft = containerWidth - icWidth;
-      const currentLeft = icOffset.left - containerOffset.left;
-
-      const percent = currentLeft / maxLeft + 0.5;
-
-      const player = document.querySelector('#lottie-ic')?.getLottie?.();
-      const doctor = document.querySelector('.doctor-item.active')?.getLottie?.();
-
-      if (player) {
-        const totalFrames = 130;
-        const targetFrame = Math.round(percent * totalFrames);
-        player.goToAndStop(targetFrame, true);
-      }
-
-      if (doctor) {
-        const totalFramesDoctor = 290;
-        const targetFrameDoctor = Math.round(percent * totalFramesDoctor);
-        doctor.goToAndStop(targetFrameDoctor, true);
-      }
-
-      // cập nhật lại vị trí doctor UI nếu cần
-      const widthDoctor = $('.home-hero-doctor-wrap').width();
-      const doctorLeft = currentLeft + icWidth / 2 - widthDoctor / 2;
-      if (doctorLeft >= 0 && doctorLeft - parseRem(40) < $container.width() - widthDoctor) {
-        $('.home-hero-doctor-wrap').css('left', doctorLeft + 'px');
-      }
-    }
-
     initDraggable() {
       this.draggableInstance = Draggable.create('.home-hero-survey-process-ic', {
         bounds: '.home-hero-survey-process',
@@ -919,21 +863,36 @@ const mainScript = () => {
             this.percent = 10;
           }
           const player = document.querySelector('#lottie-ic')?.getLottie?.();
-          const doctor = document.querySelector('.doctor-item.active')?.getLottie?.();
+          const doctorLotties = Array.from(document.querySelectorAll('.doctor-item'))
+            .map(el => el.getLottie?.())
+            .filter(Boolean);
           let widthDoctor = $('.home-hero-doctor-wrap').width();
-          const doctorLeft = currentLeft + icWidth / 2 - widthDoctor / 2;
-          if (doctorLeft >= 0 && doctorLeft - parseRem(40) < $container.width() - widthDoctor) {
+          const doctorLeft = currentLeft + icWidth / 2 - widthDoctor / 2 -parseRem(15);
+          let conditionRight = viewport.w> 767 ? doctorLeft - parseRem(66) : doctorLeft - parseRem(20);
+          let conditionLeft = viewport.w > 767 ? doctorLeft + parseRem(100) : doctorLeft + parseRem(60);
+          if (conditionLeft >= 0 && conditionRight < $container.width() - widthDoctor) {
             $('.home-hero-doctor-wrap').css('left', doctorLeft + 'px');
+          }
+          else {
+            console.log('vao day')
+            if (conditionRight >= $container.width() - widthDoctor) {
+              $('.home-hero-doctor-wrap').css('left', viewport.w > 767 ? $container.width() - widthDoctor + parseRem(66) : $container.width() - widthDoctor + parseRem(30) + 'px');
+            }
+            if (conditionLeft < 0) {
+              $('.home-hero-doctor-wrap').css('left', viewport.w > 767 ? -parseRem(100) : -parseRem(30) + 'px');
+            }
           }
           if (player) {
             const totalFrames = 130;
             const targetFrame = Math.round(this.percent * totalFrames);
 
-            $('.ass-hero-popup-result').text(`${Math.floor(this.percent * 10)} Điểm`);
+            $('.ass-hero-popup-result').text(`${Math.floor(this.percent * 9)} Điểm`);
             const totalFramesDoctor = 298;
             const targetFrameDoctor = Math.round(this.percent * totalFramesDoctor);
             player.goToAndStop(targetFrame, true);
-            doctor.goToAndStop(targetFrameDoctor, true);
+            doctorLotties.forEach(doctor => {
+              doctor.goToAndStop(targetFrameDoctor, true);
+            });
           }
         }
       })[0]; // lấy instance đầu tiên vì Draggable.create trả về mảng
@@ -959,7 +918,7 @@ const mainScript = () => {
       this.tl = gsap.timeline({
         onStart: () => {
           console.log('init')
-          $('[data-init-df]').removeAttr('data-init-df');
+          $('.on-init-hide').removeClass('on-init-hide');
           let dataHeader = $('.main').attr('data-header');
           if (dataHeader == 'hide' && viewport.w > 991) {
             header.initHideMenu();
@@ -973,7 +932,6 @@ const mainScript = () => {
       gsap.set(this.langText.words, { yPercent: 100 });
       if (viewport.w > 991) {
         gsap.set(this.menuTitle.words, { y: "-100%" });
-        gsap.set('.header-menu-title-wrap', { opacity: 1 });
         gsap.set('.header', { opacity: 0, yPercent: -100 });
         this.tl
           .to('.header-logo', { duration: 1, opacity: 1, yPercent: 0, ease: 'power2.out' })
