@@ -837,6 +837,7 @@ const mainScript = () => {
         let index = $('.home-hero-item.active').index();
         index++;
         if($('.home-hero-item').length -1 == index ){
+          
           let srcFrame = $('.home-hero-survey-form-iframe').attr('data-src')+'?result_core='+$('.ass-hero-popup-result').text();
           console.log(srcFrame)
           $('.home-hero-survey-form-iframe').attr('src', srcFrame);  
@@ -856,6 +857,7 @@ const mainScript = () => {
           items.removeClass('active');
           items.eq(index).addClass('active');
           if($('.home-hero-item').length -1 == index ){
+            $('.home-hero-item.item-2').show();
             $('.home-hero-control').hide();
           }
           $('.home-hero-control-left-mail').removeClass('active');
@@ -864,6 +866,7 @@ const mainScript = () => {
         case 'prev':
           index--;
           $('.home-hero-control').show();
+          $('.home-hero-item.item-2').hide();
           if(index == 0){
             $('.home-hero-control-left-mail').addClass('active');
             $('.control-prev').removeClass('active');

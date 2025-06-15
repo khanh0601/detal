@@ -688,6 +688,8 @@ lottie-player {
 }
 .home-hero-item.item-2 {
   width: 100%;
+  max-width: 100%;
+  display: none;
 }
 .home-hero-survey-form {
   margin-inline: -2.4rem;
@@ -762,7 +764,7 @@ lottie-player {
   .home-hero-control {
     justify-content: center;
     gap: 1.6rem;
-    bottom: 13vh;
+    bottom: 10vh;
   }
   /* .home-hero-control-item {
     place-items: center;
