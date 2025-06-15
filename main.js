@@ -513,6 +513,42 @@ const mainScript = () => {
       })
     }
 
+    // waveAnim() {
+    //   const wrap = document.querySelector('.ass-hero-cate-deco-wrap');
+    //   wrap.innerHTML = '';
+    //   const duration = 10;
+    //   const countWave = 7;
+    //   this.tl = gsap.timeline({ repeat: -1, defaults: { ease: 'linear' } });
+
+    //   for (let i = 0; i < countWave; i++) {
+    //     const wave = document.createElement('div');
+    //     wave.classList.add('ass-hero-cate-deco');
+    //     wrap.appendChild(wave);
+
+    //     this.tl.fromTo(
+    //       wave,
+    //       { scale: 0.6, opacity: 0 },
+    //       {
+    //         duration,
+    //         scale: 3,
+    //         opacity: 0,
+    //         keyframes: [
+    //           { opacity: 0, scale: 1, percent: 0 },
+    //           { opacity: 0.65, percent: 20 },
+    //           { opacity: 1, percent: 60 },
+    //           { opacity: 0.65, percent: 80 },
+    //           { opacity: 0, scale: 3, percent: 100 },
+    //         ],
+    //         ease: 'linear',
+    //         repeat: -1,
+    //         repeatDelay: 0,
+    //         immediateRender: false,
+    //         delay: (duration / countWave) * i,
+    //       },
+    //       0
+    //     );
+    //   }
+    // }
     initAssHeroWaves() {
       if (window.__assHeroWavesInitialized) return; // chỉ init 1 lần
       window.__assHeroWavesInitialized = true;
@@ -524,7 +560,7 @@ const mainScript = () => {
 
       const duration = 3;
       const countWave = 4;
-      const scales = [1.45, 2, 2.6, 3.2];
+      const scales = viewport.w > 768 ? [1.45, 2, 2.6, 3.2] : [1.3, 1.8, 2.3, 2.8];
       const delayBetween = duration / countWave - .4;
 
       for (let i = 0; i < countWave; i++) {
@@ -703,7 +739,7 @@ const mainScript = () => {
             yPercent: 0,
             duration: 1,
           }, '<=-.4')
-      let heightInitFrame = viewport.w > 991 ? viewport.h : viewport.h * .8;
+      let heightInitFrame = viewport.w > 991 ? viewport.h : viewport.h * .7;
       $('.home-hero-survey-form iframe').css('height', heightInitFrame + 'px');
       $('.home-hero-survey-process-ic').each(function () {
         let $el = $(this);

@@ -706,7 +706,8 @@ lottie-player {
     display: none;
   }
   .home-hero-survey-process,.home-hero-survey {
-    width: 65rem;
+    width: 64rem;
+    height: 9rem;
     margin-inline: auto;
   }
   .home-hero-control {
@@ -718,7 +719,7 @@ lottie-player {
     place-items: center;
   }
   .home-hero-medicine {
-    width: 40.8rem;
+    width: 36.8rem;
     margin-bottom: 10vh;
   }
   .home-hero-medicine-input-wrap {
@@ -728,8 +729,11 @@ lottie-player {
     margin-block: unset;
   }
   .home-hero-item.item-2 {
-    margin-top: 7vh;
+    padding-top: 7vh;
   }
+  label.home-hero-medicine-input-label.txt.txt-24.txt-med {
+    font-size: 2rem;
+}
  }
  @media only screen and (max-width: 767px) {
   .home-hero-survey-process,.home-hero-survey {
@@ -762,7 +766,7 @@ lottie-player {
   }
   .home-hero-box {
     width: 8rem;
-    height: 8rem;
+    height: 6rem;
     right: 0.1rem;
     row-gap: .3rem;
   }
@@ -770,7 +774,8 @@ lottie-player {
     right: .5rem;
   }
   .txt.txt-20.home-hero-box-txt {
-    font-size: 1.2rem;
+    font-size: 1rem;
+    letter-spacing: .04em;
   }
   .header-logo {
     width: 12rem;
@@ -804,3 +809,88 @@ lottie-player {
     margin-bottom: 33vh;
   }
  }
+ /* astro section responsive */
+ @media only screen and (max-width: 991px)  {
+  .ass-hero-cate {
+    margin-bottom: 11vh;
+  }
+  .txt.txt-24 {
+  font-size: 1.6rem;
+  line-height: 1.5em;
+ }
+ .ass-hero-cate-deco, .ass-hero-cate-main {
+  width: 22rem;
+  height: 22rem;
+  padding: 1rem;
+ }
+ .ass-hero-item {
+  padding: .8rem .8rem 1.2rem .8rem;
+  gap: .6rem;
+ }
+ .ass-hero-item-ic {
+  width: 2.6rem;
+  border-width: 0 .2rem .2rem 0;
+ }
+ .ass-hero-list-inner {
+  position: static;
+  display: flex;
+  flex-direction: row;
+  column-gap: 2rem;
+  height: max-content;
+ }
+ .ass-hero-list {
+  display: flex;
+  flex-direction: column;
+  justify-content: end;
+  height: 100vh;
+  padding-bottom: 6vh;
+  gap: 1.6rem
+ }
+ .ass-hero-item {
+  height: max-content;
+ }
+ .cursor {
+  display: none;
+ }
+}
+@media only screen and (max-width: 767px)  {
+  .ass-hero-cate-deco, .ass-hero-cate-main {
+    width: 20rem;
+    height: 20rem;
+  }
+  .ass-hero-cate {
+    margin-bottom: 6vh;
+}
+  .ass-hero-list-inner {
+    column-gap: 1rem;
+  }
+  .ass-hero-list {
+    gap: 1rem;
+  }
+  .txt.txt-24 {
+    font-size: 1.5rem;
+    line-height: 1.5em;
+}
+.ass-hero-submit {
+  padding: 1rem 1.8rem;
+  gap: .6rem;
+}
+.header-logo {
+  width: 14rem;
+}
+.ass-hero-item-ic {
+  display: none;
+}
+.txt.txt-24.txt-med.ass-hero-item-txt {
+  line-height: 1em;
+}
+.ass-hero-item {
+  padding: 1rem;
+}
+.txt.txt-20 {
+  font-size: 1.6rem;
+}
+.ass-hero-submit-ic{
+  width: 2rem;
+}
+}
