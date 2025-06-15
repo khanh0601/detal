@@ -762,7 +762,7 @@ const mainScript = () => {
       viewport.w > 767 ? $ic.css('left', initLeft - parseRem(5) + 'px') : $ic.css('left', initLeft - parseRem(5) + 'px');
       const $doctor = $('.home-hero-doctor-wrap');
       const doctorWidth = $doctor.outerWidth();
-      const left50InPx = containerWidth / 2 - doctorWidth / 2 - parseRem(15);
+      const left50InPx = viewport.w > 767 ?containerWidth / 2 - doctorWidth / 2 - parseRem(15): containerWidth / 2 - doctorWidth / 2 - parseRem(0);
       $doctor.css('left', left50InPx + 'px');
       let widthInit = initLeft + icWidth;
       $('.home-hero-survey-inner').css('width', widthInit + 'px');
@@ -905,7 +905,7 @@ const mainScript = () => {
             .map(el => el.getLottie?.())
             .filter(Boolean);
           let widthDoctor = $('.home-hero-doctor-wrap').width();
-          const doctorLeft = currentLeft + icWidth / 2 - widthDoctor / 2 -parseRem(15);
+          const doctorLeft = viewport.w > 767? currentLeft + icWidth / 2 - widthDoctor / 2 -parseRem(15) : currentLeft + icWidth / 2 - widthDoctor / 2 - parseRem(0);
           let conditionRight = viewport.w> 767 ? doctorLeft - parseRem(66) : doctorLeft - parseRem(20);
           let conditionLeft = viewport.w > 767 ? doctorLeft + parseRem(100) : doctorLeft + parseRem(40);
           if (conditionLeft >= 0 && conditionRight < $container.width() - widthDoctor) {
