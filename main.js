@@ -759,7 +759,7 @@ const mainScript = () => {
 
       const initLeft = maxLeft / 2 ;
       console.log(initLeft);
-      viewport.w > 767 ? $ic.css('left', initLeft - parseRem(5) + 'px') : $ic.css('left', initLeft - parseRem(5) + 'px');
+      viewport.w > 767 ? $ic.css('left', initLeft - parseRem(5) + 'px') : $ic.css('left', initLeft - parseRem(3.5) + 'px');
       const $doctor = $('.home-hero-doctor-wrap');
       const doctorWidth = $doctor.outerWidth();
       const left50InPx = containerWidth / 2 - doctorWidth / 2 - parseRem(15);
@@ -889,7 +889,7 @@ const mainScript = () => {
           const containerWidth = $container.width();
           const maxLeft = containerWidth - icWidth;
           const currentLeft = icOffset.left - containerOffset.left;
-          const distance = viewport.w > 767 ? (icOffset.left + icWidth) - containerOffset.left + parseRem(5) : (icOffset.left + icWidth) - containerOffset.left + parseRem(3);
+          const distance = viewport.w > 767 ? (icOffset.left + icWidth) - containerOffset.left + parseRem(5) : (icOffset.left + icWidth) - containerOffset.left + parseRem(3.5);
           $('.home-hero-survey-inner').css('width', distance + 'px')
           const x = this.x;
           console.log(x)
