@@ -757,11 +757,10 @@ const mainScript = () => {
       const icWidth = $ic.outerWidth();
       const maxLeft = containerWidth - icWidth;
 
-      const initLeft = maxLeft / 2;
-      $ic.css('left', initLeft + 'px');
+      const initLeft = maxLeft / 2 ;
+      console.log(initLeft);
+      $ic.css('left', initLeft - parseRem(3) + 'px');
       const $doctor = $('.home-hero-doctor-wrap');
-
-      const containerOffset = $container.offset();
       const doctorWidth = $doctor.outerWidth();
       const left50InPx = containerWidth / 2 - doctorWidth / 2 - parseRem(15);
       $doctor.css('left', left50InPx + 'px');
@@ -923,7 +922,7 @@ const mainScript = () => {
             const targetFrame = Math.round(this.percent * totalFrames);
 
             $('.ass-hero-popup-result').text(`${Math.floor(this.percent * 9)} Điểm`);
-            const totalFramesDoctor = 298;
+            const totalFramesDoctor = 290;
             const targetFrameDoctor = Math.round(this.percent * totalFramesDoctor);
             player.goToAndStop(targetFrame, true);
             doctorLotties.forEach(doctor => {

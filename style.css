@@ -708,8 +708,10 @@ lottie-player {
   }
   .home-hero-survey-process,.home-hero-survey {
     width: 64rem;
-    height: 9rem;
     margin-inline: auto;
+  }
+  .home-hero-survey-process {
+    height: 9rem;
   }
   .home-hero-control {
     justify-content: center;
@@ -741,6 +743,9 @@ lottie-player {
     width: 33rem;
     margin-inline: auto;
   }
+  .home-hero-survey-process {
+    height: 8rem;
+  }
   .home-hero-control {
     justify-content: center;
     gap: 1.6rem;
@@ -767,7 +772,7 @@ lottie-player {
   }
   .home-hero-box {
     width: 8rem;
-    height: 6rem;
+    min-height: 6rem;
     right: 0.1rem;
     row-gap: .3rem;
   }
@@ -789,7 +794,7 @@ lottie-player {
   }
   .home-hero-medicine-input-label {
     width: calc(100% - 6rem);
-    height: 5rem;
+    height: 4.4rem;
   }
   label.home-hero-medicine-input-label.txt.txt-24.txt-med {
     font-size: 1.8rem;
