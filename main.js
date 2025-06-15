@@ -759,7 +759,7 @@ const mainScript = () => {
 
       const initLeft = maxLeft / 2 ;
       console.log(initLeft);
-      $ic.css('left', initLeft - parseRem(3) + 'px');
+      $ic.css('left', initLeft - parseRem(5) + 'px');
       const $doctor = $('.home-hero-doctor-wrap');
       const doctorWidth = $doctor.outerWidth();
       const left50InPx = containerWidth / 2 - doctorWidth / 2 - parseRem(15);
@@ -886,7 +886,7 @@ const mainScript = () => {
           const containerWidth = $container.width();
           const maxLeft = containerWidth - icWidth;
           const currentLeft = icOffset.left - containerOffset.left;
-          const distance = (icOffset.left + icWidth) - containerOffset.left + 3;
+          const distance = (icOffset.left + icWidth) - containerOffset.left + parseRem(6);
           $('.home-hero-survey-inner').css('width', distance + 'px')
           const x = this.x;
           console.log(x)
@@ -904,7 +904,7 @@ const mainScript = () => {
           let widthDoctor = $('.home-hero-doctor-wrap').width();
           const doctorLeft = currentLeft + icWidth / 2 - widthDoctor / 2 -parseRem(15);
           let conditionRight = viewport.w> 767 ? doctorLeft - parseRem(66) : doctorLeft - parseRem(20);
-          let conditionLeft = viewport.w > 767 ? doctorLeft + parseRem(100) : doctorLeft + parseRem(60);
+          let conditionLeft = viewport.w > 767 ? doctorLeft + parseRem(100) : doctorLeft + parseRem(40);
           if (conditionLeft >= 0 && conditionRight < $container.width() - widthDoctor) {
             $('.home-hero-doctor-wrap').css('left', doctorLeft + 'px');
           }
