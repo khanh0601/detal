@@ -689,6 +689,7 @@ lottie-player {
 .home-hero-item.item-2 {
   width: 100%;
   max-width: 100%;
+  z-index: 1000;
   display: none;
 }
 .home-hero-survey-form {
